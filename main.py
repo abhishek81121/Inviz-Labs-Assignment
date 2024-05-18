@@ -92,5 +92,20 @@ async def fetchPropertyByState(state : StateName):
     return {'properties': items};
 
 
+class PropertyId(BaseModel):
+    propertyId :str
+@app.post('/fetch/propertyid')
+async def fetchPropertyByPropertyId(property_Id :PropertyId ):
+    id=ObjectId(property_Id.propertyId)
+    property=collection.find({'_id' :id})
+    cityName=list(property)[0]['City']
+    items=list(collection.find({'City' : cityName}))
+    if len(items)!=0:
+        for prop in items:
+            prop['_id'] = str(prop['_id'])
+    return {'properties':items}
+
+
+
 
 
