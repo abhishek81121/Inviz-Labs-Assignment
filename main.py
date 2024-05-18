@@ -36,7 +36,7 @@ class ItemToBeCreated(BaseModel):
     State:str
 
 #route for creating the property on the database
-@app.post('/create')
+@app.post('/create',description="This route creates the property obeject in the database")
 async def create(itemToBeCreated : ItemToBeCreated):
     itemToBeCreated.City=itemToBeCreated.City.title()
     itemToBeCreated.State=itemToBeCreated.State.title()
@@ -53,7 +53,7 @@ class ItemToBeUpdated(BaseModel):
     City:str
     State:str
 
-@app.post('/update')
+@app.post('/update',description='This route updates the object in the database using the projectId')
 async def update(itemToBeUpdated : ItemToBeUpdated):
     updated_property=collection.find_one_and_update({'_id' : ObjectId(itemToBeUpdated.Property_id)},{'$set':{'Property_name':itemToBeUpdated.Property_name,'Address':itemToBeUpdated.Address,'City':itemToBeUpdated.City.title(),'State':itemToBeUpdated.State.title()}},return_document=True)
     updated_property['_id']=str(updated_property['_id'])
@@ -66,7 +66,7 @@ class CityName(BaseModel):
     cityName: str
 
 
-@app.post('/fetch/city')
+@app.post('/fetch/city',description='This api fetches all the properties in one city')
 async def fetchPropertyByCity(city : CityName):
     city.cityName=city.cityName.title()
     properties=collection.find({'City': city.cityName})
@@ -80,7 +80,7 @@ async def fetchPropertyByCity(city : CityName):
 class StateName(BaseModel):
     stateName : str
 
-@app.post('/fetch/state')
+@app.post('/fetch/state',description='This route fetches all the property in a single state')
 async def fetchPropertyByState(state : StateName):
     state.stateName=state.stateName.title()
     properties=collection.find({'State': state.stateName})
@@ -94,7 +94,7 @@ async def fetchPropertyByState(state : StateName):
 
 class PropertyId(BaseModel):
     propertyId :str
-@app.post('/fetch/propertyid')
+@app.post('/fetch/propertyid',description='This route fetches all the properties in the same city by propertyid of a property ')
 async def fetchPropertyByPropertyId(property_Id :PropertyId ):
     id=ObjectId(property_Id.propertyId)
     property=collection.find({'_id' :id})
