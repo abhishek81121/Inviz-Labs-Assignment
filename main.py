@@ -67,18 +67,29 @@ class CityName(BaseModel):
 
 
 @app.post('/fetch/city')
-async def fetchCity(city : CityName):
+async def fetchPropertyByCity(city : CityName):
     city.cityName=city.cityName.title()
     properties=collection.find({'City': city.cityName})
     items=list(properties)
-    print(items)
     if len(items)!=0:
         for prop in items:
             prop['_id'] = str(prop['_id'])
 
     return {'properties': items};
 
+class StateName(BaseModel):
+    stateName : str
 
+@app.post('/fetch/state')
+async def fetchPropertyByState(state : StateName):
+    state.stateName=state.stateName.title()
+    properties=collection.find({'State': state.stateName})
+    items=list(properties)
+    if len(items)!=0:
+        for prop in items:
+            prop['_id'] = str(prop['_id'])
+
+    return {'properties': items};
 
 
 
